@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OLYMP TRADE OFFICIAL ROBOT</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background-color: #0c0f12;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        /* Premium Olymp Trade Blue/Green Border & Container Style */
+        .app-container {
+            width: 100%;
+            max-width: 380px;
+            background: #161b22;
+            border: 2px solid #00b0ff; /* Olymp Trade Cyan/Blue */
+            border-radius: 30px;
+            padding: 25px 20px;
+            box-shadow: 0 0 30px rgba(0, 176, 255, 0.15);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Top Header Area with Logo */
+        .logo-area {
+            margin-bottom: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Olymp Trade Style Logo Node */
+        .olymp-logo-box {
+            background: rgba(0, 176, 255, 0.1);
+            padding: 12px;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 176, 255, 0.3);
+            margin-bottom: 10px;
+            display: inline-flex;
+            box-shadow: 0 0 15px rgba(0, 176, 255, 0.2);
+        }
+
+        .olymp-svg {
+            width: 48px;
+            height: 48px;
+        }
+
+        .app-title {
+            font-size: 24px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #ffffff;
+        }
+
+        .app-subtitle {
+            font-size: 10px;
+            color: #00b0ff;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-top: 2px;
+            font-weight: bold;
+        }
+
+        /* Group labels */
+        .field-label {
+            font-size: 11px;
+            color: #8b949e;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 6px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        /* Asset Picker styling */
+        .asset-select {
+            width: 100%;
+            background-color: #cbd5e1;
+            color: #000000;
+            border: none;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            text-align-last: center;
+            outline: none;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            max-height: 200px;
+        }
+
+        /* Signal Output Block */
+        .signal-box {
+            width: 100%;
+            background-color: #0d1117;
+            border: 1px solid #21262d;
+            border-radius: 15px;
+            padding: 20px;
+            font-size: 15px;
+            font-weight: bold;
+            color: #8b949e;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            min-height: 68px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-transform: uppercase;
+        }
+
+        .signal-up {
+            background-color: rgba(0, 230, 118, 0.15);
+            border-color: #00e676;
+            color: #00e676;
+            text-shadow: 0 0 12px rgba(0, 230, 118, 0.5);
+            font-size: 18px;
+        }
+
+        .signal-down {
+            background-color: rgba(255, 23, 68, 0.15);
+            border-color: #ff1744;
+            color: #ff1744;
+            text-shadow: 0 0 12px rgba(255, 23, 68, 0.5);
+            font-size: 18px;
+        }
+
+        /* 1 Minute Looping Counter Widget */
+        .timer-box {
+            width: 100%;
+            background-color: #ff9800;
+            color: #000000;
+            border-radius: 12px;
+            padding: 14px;
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Analysis Status Button */
+        .analysis-btn {
+            width: 100%;
+            background-color: #21262d;
+            color: #00b0ff;
+            border: 1px solid #00b0ff;
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+        
+        .analyzing-active {
+            background-color: #00b0ff !important;
+            color: #ffffff !important;
+            box-shadow: 0 0 15px rgba(0, 176, 255, 0.4);
+        }
+
+        /* Action Button */
+        .action-btn {
+            width: 100%;
+            background-color: #00b0ff;
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 176, 255, 0.3);
+            transition: transform 0.1s ease;
+        }
+
+        .action-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .action-btn:disabled {
+            background-color: #46515e;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        /* Footer Connection Link */
+        .telegram-footer {
+            margin-top: 20px;
+            font-size: 13px;
+        }
+
+        .telegram-footer a {
+            color: #00b0ff;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* SECURE GATEWAY SCREEN LOCK OVERLAY */
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(12, 15, 18, 0.98);
+            border-radius: 28px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            z-index: 99;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-title {
+            font-size: 19px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #ff9800;
+            letter-spacing: 1px;
+        }
+
+        .password-input {
+            width: 85%;
+            padding: 15px;
+            background-color: #1f242c;
+            border: 1px solid #3f4754;
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 16px;
+            text-align: center;
+            outline: none;
+            margin-bottom: 12px;
+        }
+
+        .password-input:focus {
+            border-color: #00b0ff;
+        }
+
+        .submit-pass-btn {
+            background-color: #00b0ff;
+            color: #ffffff;
+            border: none;
+            padding: 12px 35px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        
+        .error-msg {
+            color: #ef4444;
+            font-size: 13px;
+            margin-top: 12px;
+            height: 18px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- Secure Access Control Layer -->
+        <div class="modal-overlay" id="passwordModal">
+            <div class="olymp-logo-box" style="margin-bottom: 15px;">
+                <svg class="olymp-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" stroke="#00b0ff" stroke-width="2.5"/>
+                    <path d="M8 12H16M12 8V16" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <div class="modal-title">🔐 Enter Access Key</div>
+            <input type="password" id="passKey" class="password-input" placeholder="পাসওয়ার্ড দিন...">
+            <button class="submit-pass-btn" onclick="verifyPassword()">UNLOCK</button>
+            <div class="error-msg" id="errorMsg"></div>
+        </div>
+
+        <!-- Main Workspace Interface -->
+        <div class="logo-area">
+            <div class="olymp-logo-box">
+                <svg class="olymp-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" stroke="#00b0ff" stroke-width="3" fill="rgba(0,176,255,0.1)"/>
+                    <path d="M6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12" stroke="#00e676" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <div class="app-title">OLYMP TRADE</div>
+            <div class="app-subtitle">Official Robot</div>
+        </div>
+
+        <!-- Comprehensive Olymp Trade Market Dropdown -->
+        <div class="form-group">
+            <div class="field-label">Select Olymp Market</div>
+            <select class="asset-select" id="assetDropdown">
+                <!-- Composite & OTC Indexes -->
+                <optgroup label="✨ Composite Indexes">
+                    <option value="Asia Composite Index">Asia Composite Index</option>
+                    <option value="Europe Composite Index">Europe Composite Index</option>
+                    <option value="Commodity Composite Index">Commodity Composite Index</option>
+                    <option value="LATAM Index">LATAM Index</option>
+                    <option value="Brass Index">Brass Index</option>
+                </optgroup>
+                
+                <!-- Major & Minor Currencies -->
+                <optgroup label="💵 Currency Pairs">
+                    <option value="EUR/USD">EUR/USD</option>
+                    <option value="GBP/USD">GBP/USD</option>
+                    <option value="AUD/CAD">AUD/CAD</option>
+                    <option value="USD/INR">USD/INR</option>
+                    <option value="USD/BDT">USD/BDT</option>
+                    <option value="EUR/JPY">EUR/JPY</option>
+                    <option value="GBP/JPY">GBP/JPY</option>
+                    <option value="NZD/USD">NZD/USD</option>
+                    <option value="USD/CAD">USD/CAD</option>
+                    <option value="AUD/USD">AUD/USD</option>
+                    <option value="EUR/GBP">EUR/GBP</option>
+                    <option value="EUR/CHF">EUR/CHF</option>
+                    <option value="USD/JPY">USD/JPY</option>
+                    <option value="CAD/CHF">CAD/CHF</option>
+                    <option value="EUR/AUD">EUR/AUD</option>
+                </optgroup>
+
+                <!-- Crypto Assets -->
+                <optgroup label="🪙 Crypto Markets">
+                    <option value="Bitcoin (BTC)">Bitcoin (BTC)</option>
+                    <option value="Ethereum (ETH)">Ethereum (ETH)</option>
+                    <option value="Litecoin (LTC)">Litecoin (LTC)</option>
+                    <option value="Ripple (XRP)">Ripple (XRP)</option>
+                    <option value="CryptoIndex">CryptoIndex</option>
+                </optgroup>
+
+                <!-- Commodities & Metals -->
+                <optgroup label="🔥 Commodities & Metals">
+                    <option value="Gold (XAU/USD)">Gold (XAU/USD)</option>
+                    <option value="Silver">Silver</option>
+                    <option value="Brent Crude Oil">Brent Crude Oil</option>
+                    <option value="Natural Gas">Natural Gas</option>
+                    <option value="Platinum">Platinum</option>
+                </optgroup>
+
+                <!-- OTC Special Markets -->
+                <optgroup label="📊 OTC Markets">
+                    <option value="EUR/USD (OTC)">EUR/USD (OTC)</option>
+                    <option value="GBP/USD (OTC)">GBP/USD (OTC)</option>
+                    <option value="USD/JPY (OTC)">USD/JPY (OTC)</option>
+                    <option value="Gold (OTC)">Gold (OTC)</option>
+                </optgroup>
+            </select>
+        </div>
+
+        <!-- Signal Core Target -->
+        <div class="form-group">
+            <div class="field-label">Signal Output</div>
+            <div class="signal-box" id="signalOutput">WAITING...</div>
+        </div>
+
+        <!-- 1 Minute Cycle Tracker Layout -->
+        <div class="form-group">
+            <div class="timer-box">
+                <span id="minutes">01</span>:<span id="seconds">00</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Structural Status Box -->
+        <div class="form-group">
+            <button class="analysis-btn" id="analysisBtn" disabled>ANALYSIS MODE</button>
+        </div>
+
+        <!-- Direct Action Trigger -->
+        <div class="form-group">
+            <div class="field-label">Action</div>
+            <button class="action-btn" id="actionBtn" onclick="handleGetSignal()">GET SIGNAL</button>
+        </div>
+
+        <!-- Telegram Link -->
+        <div class="telegram-footer">
+            <a href="https://t.me/Suman_trader_70" target="_blank">
+                ✈️ Telegram: @Suman_trader_70
+            </a>
+        </div>
+
+    </div>
+
+    <script>
+        const MASTER_PASSWORD = "Ol@007"; 
+        let isUnlocked = false;
+        let countdownInterval;
+
+        function handleGetSignal() {
+            if (!isUnlocked) {
+                document.getElementById('passwordModal').classList.add('active');
+                document.getElementById('passKey').focus();
+            } else {
+                generateSignal();
+            }
+        }
+
+        function verifyPassword() {
+            const inputVal = document.getElementById('passKey').value;
+            const errorElement = document.getElementById('errorMsg');
+
+            if (inputVal === MASTER_PASSWORD) {
+                isUnlocked = true;
+                errorElement.innerText = "";
+                document.getElementById('passKey').value = "";
+                document.getElementById('passwordModal').classList.remove('active');
+                generateSignal();
+            } else {
+                errorElement.innerText = "ভুল পাসওয়ার্ড! সঠিক পাসওয়ার্ড দিন।";
+            }
+        }
+
+        function generateSignal() {
+            const outputBox = document.getElementById('signalOutput');
+            const analysisBtn = document.getElementById('analysisBtn');
+            const actionBtn = document.getElementById('actionBtn');
+            
+            actionBtn.disabled = true;
+            analysisBtn.innerText = "ANALYZING...";
+            analysisBtn.classList.add('analyzing-active');
+            outputBox.className = "signal-box"; 
+            outputBox.innerText = "COMPUTING MARKET...";
+            
+            setTimeout(() => {
+                const randomVal = Math.random();
+                const selectedAsset = document.getElementById('assetDropdown').value;
+
+                analysisBtn.innerText = "SIGNAL ACTIVE";
+
+                if (randomVal > 0.5) {
+                    outputBox.innerText = `⬆️ UP (1 MIN) - ${selectedAsset}`;
+                    outputBox.classList.add('signal-up');
+                } else {
+                    outputBox.innerText = `⬇️ DOWN (1 MIN) - ${selectedAsset}`;
+                    outputBox.classList.add('signal-down');
+                }
+
+                startOneMinuteTimer(60);
+
+            }, 1200);
+        }
+
+        function startOneMinuteTimer(duration) {
+            clearInterval(countdownInterval);
+            let timer = duration;
+            const minutesDisplay = document.getElementById('minutes');
+            const secondsDisplay = document.getElementById('seconds');
+            const outputBox = document.getElementById('signalOutput');
+            const analysisBtn = document.getElementById('analysisBtn');
+            const actionBtn = document.getElementById('actionBtn');
+
+            countdownInterval = setInterval(() => {
+                let min = Math.floor(timer / 60);
+                let sec = timer % 60;
+
+                minutesDisplay.innerText = String(min).padStart(2, '0');
+                secondsDisplay.innerText = String(sec).padStart(2, '0');
+
+                if (--timer < 0) {
+                    clearInterval(countdownInterval);
+                    
+                    minutesDisplay.innerText = "01";
+                    secondsDisplay.innerText = "00";
+                    
+                    outputBox.className = "signal-box";
+                    outputBox.innerText = "WAITING...";
+                    
+                    analysisBtn.innerText = "ANALYSIS MODE";
+                    analysisBtn.classList.remove('analyzing-active');
+                    
+                    actionBtn.disabled = false; 
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+  </html>
+  
